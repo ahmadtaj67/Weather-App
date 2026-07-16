@@ -1,0 +1,527 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Weather Dashboard</title>
+
+  <!-- Font Awesome Icons -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+  >
+
+  <!-- Google Font -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet"
+  >
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+ <div class="dashboard dashboard-enter">
+
+    <!-- Left Side -->
+ <aside class="sidebar animate-panel">
+
+      <div class="logo">
+        <div class="logo-icon">
+          <i class="fa-solid fa-cloud-sun"></i>
+        </div>
+
+        <div>
+          <h2>Weather</h2>
+          <p>Dashboard</p>
+        </div>
+      </div>
+
+      <!-- Search -->
+      <div class="search-box">
+
+        <i class="fa-solid fa-location-dot location-icon"></i>
+
+        <input
+          type="text"
+          id="cityInput"
+          placeholder="Search city..."
+          autocomplete="off"
+          aria-label="Search city"
+        >
+
+        <button
+          id="searchBtn"
+          type="button"
+          aria-label="Search weather"
+        >
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
+
+      </div>
+
+      <!-- Error Message -->
+      <p id="errorMessage" class="error-message"></p>
+
+      <!-- Current Weather -->
+      <section class="current-weather-card">
+
+        <div class="weather-top">
+
+          <div>
+            <p class="card-label">Current Weather</p>
+            <h1 id="city">Lahore</h1>
+            <p id="date">Loading date...</p>
+          </div>
+
+          <img
+            id="weatherIcon"
+            class="main-weather-icon"
+            src="https://openweathermap.org/img/wn/01d@2x.png"
+            alt="Weather condition"
+          >
+
+        </div>
+
+        <div class="temperature-area">
+
+          <div class="temperature-number">
+            <span id="temp">--</span>
+            <sup>°C</sup>
+          </div>
+
+          <p id="description">Search a city to view weather</p>
+
+        </div>
+
+        <div class="weather-small-info">
+
+          <div class="small-info-item">
+            <i class="fa-solid fa-temperature-half"></i>
+
+            <div>
+              <span>Feels Like</span>
+              <strong id="feelsLike">--°C</strong>
+            </div>
+          </div>
+
+          <div class="small-info-item">
+            <i class="fa-solid fa-droplet"></i>
+
+            <div>
+              <span>Humidity</span>
+              <strong id="humidity">--%</strong>
+            </div>
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- Recent Searches -->
+      <section class="recent-searches">
+
+        <div class="recent-heading">
+          <h3>Recent Searches</h3>
+
+          <button id="clearHistory" type="button">
+            Clear
+          </button>
+        </div>
+
+        <div id="historyList" class="history-list">
+          <p class="empty-history">No recent searches</p>
+        </div>
+
+      </section>
+
+    </aside>
+
+    <!-- Right Side -->
+  <main class="main-content animate-content">
+
+      <!-- Header -->
+      <header class="main-header">
+
+        <div>
+          <p class="page-label">Weather Overview</p>
+          <h1>Weather Dashboard</h1>
+        </div>
+
+<div class="header-actions">
+
+  <div class="current-location">
+    <i class="fa-solid fa-location-dot"></i>
+    <span id="headerCity">Search your city</span>
+  </div>
+
+  <button
+    id="locationButton"
+    class="location-button"
+    type="button"
+    aria-label="Use current location"
+    title="Use current location"
+  >
+    <i class="fa-solid fa-location-crosshairs"></i>
+  </button>
+
+  <button
+    id="unitButton"
+    class="unit-button"
+    type="button"
+    aria-label="Switch temperature unit"
+  >
+    °C
+  </button>
+
+</div>
+
+        </div>
+
+      </header>
+
+      <!-- Forecast Placeholder -->
+      <section class="dashboard-card forecast-section">
+
+        <div class="section-heading">
+          <div>
+            <h2>Today's Forecast</h2>
+            <p>Hourly weather information</p>
+          </div>
+
+ <span class="coming-badge">
+  <i class="fa-solid fa-clock"></i>
+  Live Forecast
+</span>
+        </div>
+
+       <div id="forecastList" class="forecast-list">
+  <p class="forecast-loading">
+    Search a city to load forecast
+  </p>
+</div>
+
+      </section>
+      <!-- ========================= -->
+<!-- 5-Day Forecast -->
+<!-- ========================= -->
+
+<section class="dashboard-card weekly-forecast-section">
+
+  <div class="section-heading">
+
+    <div>
+      <h2>5-Day Forecast</h2>
+      <p>Daily weather outlook</p>
+    </div>
+
+    <span class="coming-badge">
+      <i class="fa-solid fa-calendar-days"></i>
+      Next 5 Days
+    </span>
+
+  </div>
+
+  <div
+    id="weeklyForecast"
+    class="weekly-forecast-list"
+  >
+
+    <p class="forecast-loading">
+      Search a city to load 5-day forecast
+    </p>
+
+  </div>
+
+</section>
+
+      <!-- Center Grid -->
+     <!-- Main Dashboard Grid -->
+<section class="middle-grid">
+
+  <!-- Left: Temperature Chart -->
+  <article class="dashboard-card chart-card">
+
+    <div class="section-heading">
+      <div>
+        <h2>Temperature</h2>
+        <p>Today's temperature overview</p>
+      </div>
+    </div>
+
+    <div class="chart-container">
+      <canvas id="temperatureChart"></canvas>
+    </div>
+
+  </article>
+
+  <!-- Right: Small Widgets -->
+  <div class="side-widgets">
+
+    <!-- Sunrise and Sunset -->
+    <article class="dashboard-card sun-card">
+
+      <div class="section-heading">
+        <div>
+          <h2>Sunrise & Sunset</h2>
+          <p>Local city time</p>
+        </div>
+      </div>
+
+      <div class="sun-details">
+
+        <div class="sun-item">
+
+          <div class="sun-icon sunrise-icon">
+            <i class="fa-solid fa-sun"></i>
+          </div>
+
+          <div>
+            <span>Sunrise</span>
+            <strong id="sunrise">--:--</strong>
+          </div>
+
+        </div>
+
+        <div class="sun-item">
+
+          <div class="sun-icon sunset-icon">
+            <i class="fa-solid fa-moon"></i>
+          </div>
+
+          <div>
+            <span>Sunset</span>
+            <strong id="sunset">--:--</strong>
+          </div>
+
+        </div>
+
+      </div>
+
+    </article>
+
+    <!-- Chance of Rain -->
+    <article class="dashboard-card rain-card">
+
+      <div class="section-heading">
+        <div>
+          <h2>Chance of Rain</h2>
+          <p>Upcoming rain probability</p>
+        </div>
+      </div>
+
+      <div id="rainList" class="rain-list">
+        <p class="rain-loading">
+          Search a city to load rain data
+        </p>
+      </div>
+
+    </article>
+
+  </div>
+
+</section>
+<!-- Air Quality Section -->
+<section class="dashboard-card air-quality-card">
+
+  <div class="air-quality-header">
+
+    <div class="section-heading">
+      <div>
+        <h2>Air Quality</h2>
+        <p>Current pollution conditions</p>
+      </div>
+    </div>
+
+    <div
+      id="aqiBadge"
+      class="aqi-badge aqi-loading"
+    >
+      Loading
+    </div>
+
+  </div>
+
+  <div class="air-quality-content">
+
+    <!-- AQI Score -->
+    <div class="aqi-overview">
+
+      <div class="aqi-circle">
+
+        <span class="aqi-label">
+          AQI
+        </span>
+
+        <strong id="aqiValue">
+          --
+        </strong>
+
+        <span id="aqiStatus">
+          Waiting for data
+        </span>
+
+      </div>
+
+      <div class="aqi-message">
+
+        <div class="aqi-message-icon">
+          <i class="fa-solid fa-wind"></i>
+        </div>
+
+        <div>
+          <p>Air condition</p>
+
+          <h3 id="aqiDescription">
+            Search a city to check air quality
+          </h3>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Pollutant Values -->
+    <div class="pollutants-grid">
+
+      <article class="pollutant-item">
+
+        <div class="pollutant-icon">
+          <i class="fa-solid fa-smog"></i>
+        </div>
+
+        <div>
+          <span>PM2.5</span>
+
+          <strong id="pm25">
+            --
+          </strong>
+
+          <small>μg/m³</small>
+        </div>
+
+      </article>
+
+      <article class="pollutant-item">
+
+        <div class="pollutant-icon">
+          <i class="fa-solid fa-cloud"></i>
+        </div>
+
+        <div>
+          <span>PM10</span>
+
+          <strong id="pm10">
+            --
+          </strong>
+
+          <small>μg/m³</small>
+        </div>
+
+      </article>
+
+      <article class="pollutant-item">
+
+        <div class="pollutant-icon">
+          <i class="fa-solid fa-industry"></i>
+        </div>
+
+        <div>
+          <span>Carbon Monoxide</span>
+
+          <strong id="carbonMonoxide">
+            --
+          </strong>
+
+          <small>μg/m³</small>
+        </div>
+
+      </article>
+
+      <article class="pollutant-item">
+
+        <div class="pollutant-icon">
+          <i class="fa-solid fa-flask"></i>
+        </div>
+
+        <div>
+          <span>Nitrogen Dioxide</span>
+
+          <strong id="nitrogenDioxide">
+            --
+          </strong>
+
+          <small>μg/m³</small>
+        </div>
+
+      </article>
+
+    </div>
+
+  </div>
+
+</section>
+      <!-- Weather Details -->
+      <section class="details-grid">
+
+        <article class="dashboard-card detail-card">
+          <div class="detail-icon">
+            <i class="fa-solid fa-wind"></i>
+          </div>
+
+          <div>
+            <p>Wind Speed</p>
+            <h2 id="windSpeed">-- km/h</h2>
+          </div>
+        </article>
+
+        <article class="dashboard-card detail-card">
+          <div class="detail-icon">
+            <i class="fa-solid fa-droplet"></i>
+          </div>
+
+          <div>
+            <p>Humidity</p>
+            <h2 id="detailHumidity">--%</h2>
+          </div>
+        </article>
+
+        <article class="dashboard-card detail-card">
+          <div class="detail-icon">
+            <i class="fa-solid fa-gauge-high"></i>
+          </div>
+
+          <div>
+            <p>Pressure</p>
+            <h2 id="pressure">-- hPa</h2>
+          </div>
+        </article>
+
+        <article class="dashboard-card detail-card">
+          <div class="detail-icon">
+            <i class="fa-solid fa-eye"></i>
+          </div>
+
+          <div>
+            <p>Visibility</p>
+            <h2 id="visibility">-- km</h2>
+          </div>
+        </article>
+
+      </section>
+
+    </main>
+
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="script.js"></script>
+
+</body>
+</html>
